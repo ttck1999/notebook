@@ -1,0 +1,66 @@
+
+一、注册
+
+二、删除仓库
+  （1）、选中要删除的仓库、点击settings，输入仓库名称，删除
+
+三、创建仓库
+（1）、输入仓库名称
+（2）、是否在仓库中加一个readme文档
+
+四、克隆代码
+  （1）、使用SSH协议，SSH和HTTPS(传输加密协议，每次都要输入用户名密码)
+  （2）、将地址复制
+  （3）、进入workspace，输入git clone 粘贴地址
+
+五、配置SSH公钥
+  （1）、ssh-keygen -t rsa -C xiaoruzhao@qq.com
+  （2）、打开id_rsa.pub（公钥），复制代码
+  （3）、回到github，点击右上角图标点击settings
+  （4）、点击SSH and GPG keys，点击New SSH key，输入title，粘贴Key
+  （5）、点击添加
+  （6）、git clone  粘贴ssh地址
+
+六、同步代码（如何将修改的代码提交到远端）
+  （1）、进入目录
+  （2）、设置用户名和密码
+        git config --global  user.name @前面的用户名
+         git config --global  user.email ttck1999@qq.com
+  （3）、git status 查看文件修改的状态  什么时候都可以运行
+  （4）、git add .
+  （5）、git status   
+  （6）、git commit -a -m "注释信息"  不管是添加还是修改都提交上去，忘记输入-m，按esc输入:q或:wq退出
+  （7）、git  push 提交到远端  一般都是在项目做完后才push
+  
+七、分支（多人合作，一般是在分支上开发，在主干上发布）
+  （1）、git branch 查看分支
+  （2）、git checkout -b "20161128-footballSNS-bugfix"  从当前分支上拉一个分支出来
+        git branch "20161128-footballSNS-bugfix"  也是拉一个分支出来 但是不切换过去
+  （3）、git checkout  master 切换分支
+  （4）、分支的映射 git push --set-upstream origin 20161128-footballSNS-bugfix  在远端创建一个分支
+  （5）、打开.git/config，复制修改分支名称
+  
+八、diff代码
+      必须在master下操作  QA在github中查看代码的修改之处
+九、merge代码  也就是合并代码
+  （1）、git merge “子分支”   一般都是主分支去merge   merge的同事进行了commit操作
+  （2）、git push 传到远端
+  
+  （3） 在自己的分支下，git merge master  合并自己和master的代码
+  
+十、配置别名
+    git config --global alias.st status  
+                             .co checkout
+                             .ci commit
+                             .br branch
+十一、显示日志  
+    git log  --pretty=oneline   日志在一行显示
+    
+十二、代码回滚
+    git reset --hard  回滚到最近的一次操作
+    git reset --hard  d37b9（要回复到的那个版本号）
+   
+十三、解决代码冲突
+    张三修改了common对象
+    李四修改了common对象   这样就会出现代码冲突  需要手动解决，到底哪一个   或者两者都用   重新 gitcommit  -a -m “” 就可以了
+  
