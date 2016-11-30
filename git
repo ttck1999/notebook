@@ -42,6 +42,7 @@
   
 八、diff代码
       必须在master下操作  QA在github中查看代码的修改之处
+      
 九、merge代码  也就是合并代码
   （1）、git merge “子分支”   一般都是主分支去merge   merge的同事进行了commit操作
   （2）、git push 传到远端
