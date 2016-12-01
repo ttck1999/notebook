@@ -1,0 +1,18 @@
+
+1、ng-app 指令定义一个 AngularJS 应用程序。
+2、ng-controller   控制器
+3、ng-model 只能作用域input的text、textarea、password
+4、ng-bind 和{{}} 类似 将值解析到标签内作为这个标签的内容
+5、ng-repeat 遍历  在遍历的的时候不允许有重复的 不然会报错 $index  获取索引
+6、ng-show ng-hide ng-if的区别：
+	ng-show和ng-hide是通过css的display属性实现的显示和隐藏
+	ng-if是通过创建和删除dom节点来实现的显示和隐藏
+7、ng-click ng-keyup   鼠标点击 鼠标抬起 $event 对当前事件的引用
+8、track by item  用于按照指定的字段名来排序
+9、过滤器：
+	currency:'符号'  货币符号  一般跟价格一起使用
+	limitTo:n  显示前n条记录
+	orderBy:'字段'  按照指定的字段来排序 字典前面加"-"号 是降序排列
+	date:'yyyy年MM月dd日 HH:mm:ss' 会把毫秒转化为2016年11月2日 09:12的格式
+	lowercase  字母全部小写
+	uppercase 字母全部大写
