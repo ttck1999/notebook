@@ -67,6 +67,6 @@ ng指令
     与deferred.resolve相反，调用时改变运行状态为'执行失败',从而触发fail
     
   ★★★★★：解决改变状态的遗留问题
-    deferred.promisc()
+    deferred.promise()
       在原来的deferred对象上返回另一个deferred对象，屏蔽与改变状态有关的方法（如：resolve（）和reject（）），从而使状态不能再被更改。
         
