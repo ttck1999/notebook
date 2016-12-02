@@ -1,18 +1,40 @@
 
-1、ng-app 指令定义一个 AngularJS 应用程序。
-2、ng-controller   控制器
-3、ng-model 只能作用域input的text、textarea、password
-4、ng-bind 和{{}} 类似 将值解析到标签内作为这个标签的内容
-5、ng-repeat 遍历  在遍历的的时候不允许有重复的 不然会报错 $index  获取索引
-6、ng-show ng-hide ng-if的区别：
-	ng-show和ng-hide是通过css的display属性实现的显示和隐藏
-	ng-if是通过创建和删除dom节点来实现的显示和隐藏
-7、ng-click ng-keyup   鼠标点击 鼠标抬起 $event 对当前事件的引用
-8、track by item  用于按照指定的字段名来排序
-9、过滤器：
-	currency:'符号'  货币符号  一般跟价格一起使用
-	limitTo:n  显示前n条记录
-	orderBy:'字段'  按照指定的字段来排序 字典前面加"-"号 是降序排列
-	date:'yyyy年MM月dd日 HH:mm:ss' 会把毫秒转化为2016年11月2日 09:12的格式
-	lowercase  字母全部小写
-	uppercase 字母全部大写
+
+ng指令
+
+1.ng-app  作用范围
+2.ng-controller  控制器
+3.ng-bind  将值解析到标签作为这个标签的内容  等价于 {{值}}
+
+4.ng-repeat 遍历 
+  ng-repeat在遍历循环的时候不允许有相同的值，否则会报错
+  {{$index}}  表示获取索引下标
+  ng-repeat='i in arr track by index(字段名：也可以是i的名字本身)'
+  track by 用于按照指定的字段名来进行排序 
+  
+5.ng-show，ng-hide，ng-if的区别：
+  ng-show和ng-hide 通过css的display属性来实现显示和隐藏效果
+  ng-if  通过创建或删除DOM节点来实现显示和隐藏效果
+ 
+6.ng-class两种语法结构
+  ① ng-class="{'classNmae':value}"  value如：book.published(布尔值)  当value为true时添加一个classname的类  只能添加一个类
+  ② ng-class="{true:'a类',false:'b类'}[value(布尔值)]"  当value为true时添加a类  当value为false时添加b类
+ 
+7.双向数据绑定
+  ng-model  只能作用于input的text、textarea、password中
+  ng-事件  绑定事件  如：ng-click  ng-keyup  
+  $event 是对当前事件的引用
+  
+8.过滤器  value(值) |管道符
+  常用的管道符：（多个管道符同时用也用 |隔开）
+    ① currency:"符号"  如：{{price |currency:'￥'}} 货币符号￥或者‘人民币’ 表示在对应的内容前面加钱币符号或者相应的文字
+    ② limitTo:'n'   n表示数字  显示前n条记录
+    ③ orderBy:'字段'   按照指定字段排序  在字段前面加‘-’ 表示降序排列
+    ④ date:'日期字符串'   或者  'yyyy年MM月dd日 hh时mm分ss秒'  显示时间
+    ⑤ uppercase 大写   lowercase  小写
+    ⑥ filter:searchText:true   过滤  （可以自己定义） 自己定义的写法 filter:search:value
+      按searchText的值进行过滤  加true表示完全匹配  不加true表示模糊匹配
+    
+    
+9.var myApp = angular.module('myApp',[]);    定义一个模块 []中的是依赖关系
+  var myApp = angular.module('myApp');    没有[]表示获取模块
