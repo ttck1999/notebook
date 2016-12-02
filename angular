@@ -38,3 +38,35 @@ ng指令
     
 9.var myApp = angular.module('myApp',[]);    定义一个模块 []中的是依赖关系
   var myApp = angular.module('myApp');    没有[]表示获取模块
+  
+  
+  deferred对象
+1.deferred  延迟对象
+    也可以说是jQuery的回调函数的解决方案。
+    
+2.$.ajax()的链式操作
+  .done(function(){'成功'})
+  .fail(function(){'失败'})
+  ...   //下面可以继续调用第二个成功或者失败的函数
+  
+3.用deferred的好处
+    ① 可以自由的添加多个回调
+    ② 允许为多个事件指定同一个回调函数
+        方法：$.when()  为多个操作指定回调函数 即：当什么事件执行完成之后再执行done或fail方法
+        注意：$.when()  的参数只能是$.ajax或者deferred对象，不能为普通函数
+    ③ 最大的好处是，可以把这一套回调函数的接口，从$.ajax扩展到所有操作
+    
+4.创建deferred对象
+  var dtd = $.deferred()
+  
+5.改变状态方法（2个）
+  deferred对象对于普通函数 不能直接显示 成功或者失败状态  需要手动更改
+  ① ---deferred.resolve()
+    手动改变deferred对象的运行状态为'已完成',从而触发done
+  ② ---deferred.reject()
+    与deferred.resolve相反，调用时改变运行状态为'执行失败',从而触发fail
+    
+  ★★★★★：解决改变状态的遗留问题
+    deferred.promisc()
+      在原来的deferred对象上返回另一个deferred对象，屏蔽与改变状态有关的方法（如：resolve（）和reject（）），从而使状态不能再被更改。
+        
