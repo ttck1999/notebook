@@ -1,0 +1,142 @@
+★★★★★★  ----    案例：实现点击左边导航，变化右侧内容的方法：4种
+1.ifarme（原生推荐）
+  ==》<iframe src="./html/home.html" frameborder="0" name="content"></iframe>   定义一个name值
+
+  ==》<nav>
+          <a target="content" href="./html/home.html">首页</a>
+          <a target="content" href="./html/product.html">电子产品</a>
+          <a target="content" href="./html/service.html">售后服务</a>
+     </nav>
+     ********让a标签中的target等于ifarme中的name值  就可以实现无刷新切换
+
+2.ajax请求   原生的方法，但是请求慢 不建议使用
+  ==》$('nav').on('click','a',function(){
+         switch($(this).data('nav')){
+         case 'home':
+         url='./html/home.html';
+         break;
+         case 'product':
+         url='./html/product.html';
+         break;
+         case 'service':
+         url='./html/service.html';
+         break;
+     }
+
+         $.ajax({
+            url:'',
+         })
+     })
+
+3.ng-include（angular框架）
+  ==》<nav id="nav">
+          <a target="content" href="javascript:void(0)" ng-click="goTo('home')">首页</a>
+          <a target="content" href="javascript:void(0)" ng-click="goTo('product')">电子产品</a>
+          <a target="content" href="javascript:void(0)" ng-click="goTo('service')">售后服务</a>
+      </nav>
+      <div ng-include="pageUrl"></div>   //ng-include 引用变量得到地址
+
+  ==》myApp.controller('myController',['$scope',function ($scope) {
+          $scope.pageUrl = './html/home.html';
+          $scope.goTo = function (page) {
+              $scope.pageUrl = './html/'+page+'.html';
+          }
+      }]);
+
+4.路由  ↓↓↓↓↓↓
+
+★★★★★★  ----   angular自带的路由
+
+1.注入路由  ngRoute
+  angular.module('myApp',['ngRoute']);  //ngRoute  注入路由
+
+2.配置路由
+  myApp.config(function ($routeProvider) {                                //函数参数中注入路由映射 $routeProvider
+    $routeProvider
+        .when('/home',{                                                   //.when()方法配置 第一个参数是路由名字
+            templateUrl:'./html/home.html',                               //地址
+            controller:'homeController'                                   //控制器
+            /* caseInsensitiveMatch:true */                               //------------true忽略大小写 false严格大小写   默认false
+        })
+        .when('/product/:id/:name',{                                      // ：id 传参数
+            templateUrl:'./html/product.html',
+            /*controllerAs:'product',*/
+            controller:'productController as product'                     // 给控制器起别名
+            resolve:{                                                     //ajax写在resolve中 保证页面请求完毕再跳转路由
+                serviceData:function ($http) {                            //serviceData函数存放ajax请求数据  在控制器中把serviceData注入
+                    return $http.get('./mock/liveList.json')
+                         .then(function (result) {
+                             return result.data.data;
+                         })
+                }
+            }
+        })
+        .when('/service',{
+            templateUrl:'./html/service.html',
+            controller:'serviceController'
+        })
+        .when('/error',{
+            template:'<h2>页面走丢了 T.T</h2>'
+        })
+        .otherwise('/home');                          //配置默认路由 .otherwise（）
+        .otherwise({
+            redirectTo:'/error'                       //重定向  redirectTo
+        })
+  });
+
+3.控制器别名
+  ==》方法：
+    （1）controller:'productController as product'
+    （2）controllerAs:'product'
+  ==》说明：
+    （1）给controller起了别名以后，必须用this.属性抛出，不能再用$scope
+    （2）控制器在嵌套的时候不需要$parent来引用父控制器，在html页面中，可以直接通过{{别名.属性}}调用这个控制器中的变量和方法
+
+4.控制器的嵌套
+  ==》 <div ng-controller="countryController  as country" style="margin-left: 50px;">
+           {{country.name}} / {{name}}
+           <div ng-controller="provinceController as province">
+               {{country.name}}-{{province.name}}  /  {{$parent.name}}-{{name}}
+               <div ng-controller="cityController  as city">
+                   {{country.name}}-{{province.name}}-{{city.name}}  /  {{$parent$parent.name}}-{{$parent.name}}-{{name}}
+               </div>
+           </div>
+       </div>
+
+  ==》$parent 是对父控制器的引用  如果有控制器别名 则用控制器别名来显示数据
+
+5.$routeParams
+  在控制器中注入$routeParams  这个对象用于接收路由传递的参数pei
+
+6.angular事件
+  绑定事件 ==》 $scope.$on('事件',function(event,current,previous,next){});
+  常用事件：$routeChangeStart      --- 路由发生变化的时候触发
+           $routeChangeSuccess    --- 路由成功切换的时候触发
+           $routeChangeError      --- 路由异常的时候触发
+           $routeUpdate           --- 路由更新的时候触发
+
+  函数参数：event     --- 对当前事件引用  例如：event。preventDefault()  这个是angular中封装的方法，不是js中的方法，阻止路由的跳转
+           current   --- 即将要去的路由  例如：current.$$route.originalPath   指即将要跳去的路由路径
+           previous  ---
+           next      --- 下一个
+
+7.重新载入
+  需要在控制器中注入：$route
+  方法：$route.reload()   重新加载路由（刷新）
+
+★★★★★★  ----   angular引入外部插件的路由 ui.router
+
+1.注入路由  ngRoute
+  angular.module('myApp',['ui.router']);  //ui.router  注入路由
+
+2.配置路由
+   myApp.config(function ($stateProvider) {                          //注入参数和route不一样 $routeProvider  /  $stateProvider
+    $stateProvider                                                   //方法和route不一样  .when()  /  .state()
+        .state('home',{                                              //  /home/路由的名称 不加/  对路由的引用
+            url:'/home/',                                            //页面名字 双/  可以和路由不一样  但是建议一样
+            templateUrl:'./html/home.html',
+            controller:'homeController'
+        })
+  });
+
+  <a ui-sref="home" >首页</a>          //ui-sref 里面必须是路由的名称
